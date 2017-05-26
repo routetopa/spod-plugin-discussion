@@ -1,0 +1,30 @@
+<div id="agora_chat_container">
+    {foreach $comments as $comment}
+    <div class="{$comment->css_class}" id="comment_{$comment->id}">
+        <div class="ow_avatar style-scope {$comment->avatar_css}" title="{$comment->username}">
+            <a class="style-scope" href="{$comment->owner_url}"><img src="{$comment->avatar_url}">{$comment->avatar_initial}</a>
+        </div>
+        <div class="agora_speech">
+            <div class="agora_speech_text">{$comment->comment}</div>
+            <div id="agora_datalet_placeholder_{$comment->id}" class="{$comment->datalet_class} {$comment->component}">
+                {$comment->datalet_html}
+            </div>
+            <div class="agora_speech_info">
+                <div class="agora_speech_username">{$comment->username}</div>
+                <div class="agora_speech_time">{$comment->timestamp}</div>
+            </div>
+        </div>
+    </div>
+    {/foreach}
+</div>
+
+<div class="agora_chat_input">
+
+    <div class="agora_datalet_preview" id="agora_datalet_preview" style=""></div>
+
+    <textarea name="agora_comment" placeholder="{text key='spodagora+add_a_comment'}" id="agora_comment"></textarea>
+    <input type="button" name="agora_comment_send" id="agora_comment_send" value="{text key='spodagora+send'}">
+    <div class="agora_myspace_button" id="agora_myspace_button"></div>
+    <div class="agora_controllet_button" id="agora_controllet_button"></div>
+    <div class="agora_preview_button" id="agora_preview_button"></div>
+</div>
