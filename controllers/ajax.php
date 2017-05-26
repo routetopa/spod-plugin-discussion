@@ -69,7 +69,7 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
             $client->initialize();
 
             $client->emit('realtime_notification',
-                ['plugin' => 'cocreation',
+                ['plugin' => 'cocreation_discussion',
                 'entityId' => $_REQUEST['entityId'],
                 'comment' => $comment->comment,
                 'message_id' => $comment->id,
