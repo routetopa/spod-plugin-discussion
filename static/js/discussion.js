@@ -87,7 +87,7 @@ SPODDISCUSSION.onPreviewButtonClick = function ()
 SPODDISCUSSION.handleRealtimeNotification = function ()
 {
     // Handle realtime communication
-    var socket = io(window.location.origin + ":3000");
+    var socket = io(window.location.origin , {path: "/realtime_notification"/*, transports: [ 'polling' ]*/});
     var target = $("#agora_chat_container");
 
     socket.on('realtime_message_' + SPODDISCUSSION.entityId, function(data) {
