@@ -15,8 +15,8 @@ SPODDISCUSSION.init = function ()
     // Set datalet preview target
     ODE.commentTarget = "agora_datalet_preview";
 
-    // Set plugin preview to 'agora'
-    ODE.pluginPreview = 'agora';
+    // Set plugin preview to 'discussion'
+    ODE.pluginPreview = 'discussion';
 
     // Handle for click on send button (submit message)
     $("#agora_comment_send").click(function(){
@@ -131,5 +131,10 @@ SPODDISCUSSION.onCommentAdded = function (e)
         $("#agora_preview_button").hide();
         ODE.reset();
     }
+};
+
+SPODDISCUSSION.dataltet_preview_added = function()
+{
+    $("#agora_preview_button").show();
 };
 
