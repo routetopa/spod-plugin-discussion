@@ -26,6 +26,9 @@ class SPODDISCUSSION_CMP_Discussion extends OW_Component
         $raw_comments = SPODDISCUSSION_BOL_Service::getInstance()->getCommentsByEntityId($entityId);
         $this->assign('comments', $this->process_comment_include_datalet($raw_comments, OW::getUser()->getId()));
 
+        // ADD PRIVATE ROOM DEFINITION
+        $this->assign('components_url', SPODPR_COMPONENTS_URL);
+
         $this->initializeJS($entityId);
     }
 
