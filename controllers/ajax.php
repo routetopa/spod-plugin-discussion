@@ -16,9 +16,24 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
             throw new Redirect403Exception();
         }
 
-        if ( !OW::getUser()->isAuthenticated() )
+        /*if ( !OW::getUser()->isAuthenticated() )
         {
             throw new AuthenticateException();
+        }*/
+
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
         }
 
         if(SPODAGORA_CLASS_Tools::getInstance()->check_value(["entityId", "comment"]))
@@ -28,7 +43,7 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
 
             $c = SPODDISCUSSION_BOL_Service::getInstance()->addComment($_REQUEST['entityId'],
                 $comment,
-                OW::getUser()->getId());
+                $user_id);
 
             $this->send_realtime_notification($c);
 
@@ -38,7 +53,7 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
                 ODE_BOL_Service::getInstance()->addDatalet(
                     $_REQUEST['datalet']['component'],
                     $_REQUEST['datalet']['fields'],
-                    OW::getUser()->getId(),
+                    $user_id,
                     $_REQUEST['datalet']['params'],
                     $c->getId(),
                     $_REQUEST['plugin'],
@@ -59,6 +74,12 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
+    //Reader
+    public function getComments()
+    {
+        echo json_encode(SPODDISCUSSION_BOL_Service::getInstance()->getCommentsByEntityId($_REQUEST['entity_id']));
+        exit;
+    }
 
     //Realtime
     private function send_realtime_notification($comment)
