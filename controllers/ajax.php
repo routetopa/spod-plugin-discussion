@@ -77,7 +77,19 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
     //Reader
     public function getComments()
     {
-        echo json_encode(SPODDISCUSSION_BOL_Service::getInstance()->getCommentsByEntityId($_REQUEST['entity_id']));
+        try
+        {
+            $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+        }
+        catch (Exception $e)
+        {
+            echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+            exit;
+        }
+
+        $raw_comments = SPODDISCUSSION_BOL_Service::getInstance()->getCommentsByEntityId($_REQUEST['entityId']);
+        $comments = SPODDISCUSSION_CLASS_Tools::getInstance()->process_comment_include_datalet($raw_comments, $user_id);
+        echo json_encode($comments);
         exit;
     }
 
