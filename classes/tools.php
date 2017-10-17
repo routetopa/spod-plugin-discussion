@@ -108,4 +108,28 @@ class SPODDISCUSSION_CLASS_Tools
     {
         return str_replace("'","&#39;", $string);
     }
+
+    public function get_avatar_data($userId)
+    {
+        if(empty($_REQUEST['username']))
+        {
+            $avatars = $this->process_avatar(BOL_AvatarService::getInstance()->getDataForUserAvatars([$userId]));
+
+            return [
+                'username' => $avatars[$userId]['title'],
+                'user_avatar_src' => $avatars[$userId]['src'],
+                'user_avatar_css' => $avatars[$userId]['css'],
+                'user_avatar_initial' =>  $avatars[$userId]['initial'],
+                'user_url' => $avatars[$userId]['url']
+            ];
+        }
+
+        return [
+            'username' => $_REQUEST['username'],
+            'user_avatar_src' => $_REQUEST['user_avatar_src'],
+            'user_avatar_css' => $_REQUEST['user_avatar_css'],
+            'user_avatar_initial' =>  $_REQUEST['user_avatar_initial'],
+            'user_url' => $_REQUEST['user_url']
+        ];
+    }
 }

@@ -45,7 +45,7 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
                 $comment,
                 $user_id);
 
-            $this->send_realtime_notification($c);
+            $this->send_realtime_notification($c, $user_id);
 
             /* ODE */
             if( ODE_CLASS_Helper::validateDatalet($_REQUEST['datalet']['component'], $_REQUEST['datalet']['params'], $_REQUEST['datalet']['fields']) )
@@ -94,28 +94,30 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
     }
 
     //Realtime
-    private function send_realtime_notification($comment)
+    private function send_realtime_notification($comment, $user_id)
     {
         try
         {
             $client = new Client(new Version1X('http://localhost:3000/realtime_notification'));
             $client->initialize();
 
+            $avatar_data = SPODDISCUSSION_CLASS_Tools::getInstance()->get_avatar_data($comment->ownerId);
+
             $client->emit('realtime_notification',
                 ['plugin' => 'cocreation_discussion',
                 'entityId' => $_REQUEST['entityId'],
                 'comment' => $comment->comment,
                 'message_id' => $comment->id,
-                'user_id' => OW::getUser()->getId(),
-                'user_display_name' => $_REQUEST['username'],
-                'user_avatar' => $_REQUEST['user_avatar_src'],
-                'user_avatar_css' => $_REQUEST['user_avatar_css'],
-                'user_avatar_initial' => $_REQUEST['user_avatar_initial'],
+                'user_id' => $user_id,
+                'user_display_name' => $avatar_data['username'],
+                'user_avatar' => $avatar_data['user_avatar_src'],
+                'user_avatar_css' => $avatar_data['user_avatar_css'],
+                'user_avatar_initial' => $avatar_data['user_avatar_initial'],
                 'user_url' => $_REQUEST['user_url'],
-                'component' => $_REQUEST['datalet']['component'],
-                'params' => $_REQUEST['datalet']['params'],
-                'fields' => $_REQUEST['datalet']['fields'],
-                'data' => $_REQUEST['datalet']['data']]);
+                'component' => empty($_REQUEST['datalet']['component']) ? '' : $_REQUEST['datalet']['component'],
+                'params' => empty($_REQUEST['datalet']['params']) ? '' : $_REQUEST['datalet']['params'],
+                'fields' => empty($_REQUEST['datalet']['fields']) ? '' : $_REQUEST['datalet']['fields'],
+                'data' => empty($_REQUEST['datalet']['data']) ? '' : $_REQUEST['datalet']['data'] ]);
 
             $client->close();
         }
