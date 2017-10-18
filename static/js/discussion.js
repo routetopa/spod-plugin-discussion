@@ -90,7 +90,7 @@ SPODDISCUSSION.handleRealtimeNotification = function ()
     var socket = io(window.location.origin , {path: "/realtime_notification"/*, transports: [ 'polling' ]*/});
     var target = $("#agora_chat_container");
 
-    socket.on('realtime_message_' + SPODDISCUSSION.entityId, function(data) {
+    socket.on('realtime_cocreation_message_' + SPODDISCUSSION.entityId, function(data) {
 
         if (SPODDISCUSSION.userId !== data.user_id)
         {
