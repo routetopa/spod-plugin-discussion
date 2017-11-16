@@ -61,8 +61,11 @@ class SPODDISCUSSION_CTRL_Ajax extends OW_ActionController
             }
             /* ODE */
 
-            if (!empty($c->id))
-                echo '{"result":"ok", "post_id":"'.$c->id.'"}';
+            if (!empty($c->id)) {
+                //Add comment event trigger for notification system
+                OW::getEventManager()->trigger(new OW_Event('spod_discussion.add_comment', array('comment' => $c)));
+                echo '{"result":"ok", "post_id":"' . $c->id . '"}';
+            }
             else
                 echo '{"result":"ko"}';
         }
