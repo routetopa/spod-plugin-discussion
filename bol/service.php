@@ -35,6 +35,7 @@ class SPODDISCUSSION_BOL_Service
         $c->entityId = $entityId;
         $c->comment = $comment;
         $c->ownerId = $ownerId;
+        $c->timestamp = date('Y-m-d H:i:s',time());
 
         SPODDISCUSSION_BOL_DiscussionCommentDao::getInstance()->save($c);
 
